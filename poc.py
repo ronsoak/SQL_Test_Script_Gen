@@ -8,7 +8,7 @@ sql_load = pd.read_clipboard(sep='\n',header=None, squeeze=1)
 
 #GET TABLE NAME
 sql_header = sql_load.iloc[0]
-sql_table =  re.search('\S+\.\S+',sql_header, flags=re.U)[0]
+sql_table =  re.search(r'\S+\.\S+',sql_header, flags=re.U)[0]
 
 #FILE OUTPUT
 sql_table_file = sql_table.replace(".","_")
@@ -28,36 +28,35 @@ sql_load = sql_load.str.upper()                                         #convert
 sql_load = pd.DataFrame(sql_load)                                       #convert the series into a Data Frame
 sql_load.columns = ['INPUT']                                            #rename the first column as 'INPUT'
 sql_load_start = sql_load.loc[sql_load['INPUT']=='('].index.values[0]   #get the row that has the (
-sql_load_end = sql_load.loc[sql_load['INPUT']==')'].index.values[0]     #get the row that has the ) 
-sql_cols = sql_load.iloc[sql_load_start+1:sql_load_end]                 #limit the range down to just the rows between ( ) 
+sql_load_end = sql_load.loc[sql_load['INPUT']==')'].index.values[0]     #get the row that has the )
+sql_cols = sql_load.iloc[sql_load_start+1:sql_load_end]                 #limit the range down to just the rows between ( )
 sql_cols.reset_index(drop=1, inplace=True)                              #resets the index
 sql_cols = sql_cols['INPUT'].str.split(expand=True)                     #splitting the columns off
 sql_cols = sql_cols.loc[:,0:1]                                          #reducing just down to cols 1 & 2, dropping 3&4
 sql_cols = sql_cols.rename(columns = {0:'COL_NAME',1:'DATA_TYPE'})      #rename columns to col_name and data_type
-sql_cols['DATA_TYPE'] = sql_cols['DATA_TYPE'].str.extract('(^\w*)')     #this will strip off bracketed numbers at the end varchar(45)->varchar
+sql_cols['DATA_TYPE'] = sql_cols['DATA_TYPE'].str.extract(r'(^\w*)')     #this will strip off bracketed numbers at the end varchar(45)->varchar
 
-#DEFINE FUNCTION FOR PRINTING 
+#DEFINE FUNCTION FOR PRINTING
 def col_func(a,b,c):
-    if      b in red_nums: 
+    if      b in red_nums:
         sql_output.write("select min("+a+"), avg("+a+"), max("+a+") from "+c+"; \n" )
-        
+
     elif    b in red_nums:
         sql_output.write("select "+a+", count(*) from "+c+" group by 1 order by 1; \n" )
-        
+
     elif    b in red_dates:
         sql_output.write("select min("+a+"), max("+a+") from "+c+"; \n" )
-        
+
     elif    b in red_string:
         sql_output.write("select "+a+", count(*) from "+c+" group by 1 order by 2 desc limit 50; \n" )
         sql_output.write("select count(distinct("+a+")), count(*) from "+c+" group by 1 order by 2 desc limit 50; \n" )
-    
+
     elif    b in red_bool:
         sql_output.write("select "+a+", count(*) from "+c+" group by 1 order by 2 desc limit 10; \n" )
-        
+
     else:
         sql_output.write("Column:"+a+"is not a know Datatype. Datatype passed was:"+b+"\n")
-        
-    
+
 for index, row in sql_cols.iterrows():
     col_func(row['COL_NAME'], row['DATA_TYPE'], sql_table)
 
