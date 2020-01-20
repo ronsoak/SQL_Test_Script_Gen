@@ -18,6 +18,14 @@ sql_header = sql_load.iloc[0]                                               #The
 sql_validate = re.search(r'^\w*\b',sql_header, flags=re.U)[0]               #Whats the first word in the first line, should be CREATE
 sql_validate = sql_validate.upper()                                         #Convert the first word to uppercase
 if sql_validate != 'CREATE':                                                #If the first word is not CREATE kill the proc
+    filename = "script_terminated_with_error.txt"
+    error_output = open(filename,"w")
+    error_output.write("If you are reading this message, the python script has terminated. \n")   
+    error_output.write("Reason? The first word on the clipboard wasn't CREATE.\n")
+    error_output.write("This means you have not copied a valid Redshift SQL Table Create Statement to your clipboard. \n")
+    error_output.write("For more help refer to: https://github.com/ronsoak/SQL_Test_Script_Gen.\n")
+    error_output.close
+    os.startfile(fr'{filename}')
     sys.exit("Not a valid DDL, must start with CREATE")
 else: sql_table =  re.search(r'\w+\.\w+',sql_header, flags=re.U)[0]         #If valid ddl then this gets the table name
 
@@ -36,7 +44,7 @@ sql_table =  re.search(r'\w+\.\w+',sql_header, flags=re.U)[0]               #Fin
 sql_table_file = sql_table.replace(".","][")                                #Can't have a . in a file name ie schema.table so have replaced it with ][
 filename = "[table_testing]["+sql_table_file+"].txt"                        #File name should look like [table_testing][schema][tablename].txt
 filename = filename.lower()                                                 #Make the whole thing lower case, I just like it to be consistent
-sql_output = open(filename,"w",)                                            #Create a new file in the directory
+sql_output = open(filename,"w")                                            #Create a new file in the directory
 
 #READ THE COL NAMES AND DATA TYPES
 sql_load = pd.Series(sql_load)                                              #Turn the SQL into a Series so we can convert to upper case
