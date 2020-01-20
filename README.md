@@ -21,8 +21,8 @@ Part of thorough testing in SQL is ensuring that each column you have pulled thr
 1. Download the git as a Zip, you only really need 'Launch_Me.bat' and 'Gen_Test_Script.py'
 2. Place these two files in the folder of your choosing
 3. Edit 'Launch_Me.bat' and go to line ten
-4. Edit 'C:/<path to your python install>/python.exe' to be where your python.exe is installed
-5. Edit 'c:/<path to this script>/Gen_Test_Script.py' to be where you've stored this script
+4. Edit 'C:/path to your python install/python.exe' to be where your python.exe is installed
+5. Edit 'c:/path to this script/Gen_Test_Script.py' to be where you've stored this script
 6. Providing the above is all done properly, then your done.
 
 ## How to Use 
