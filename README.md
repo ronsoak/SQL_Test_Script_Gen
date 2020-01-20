@@ -1,7 +1,7 @@
-﻿# SQL Test Script Generator
+![git_header](./assets/git_header.PNG)
+# SQL Test Script Generator
 
 *For Redshift Table Builds*
-![git_header](./assets/git_header.PNG)
 ## What is this?
 This is a python script that reads a table build written in Redshift Syntax and then for every column outputs a text file with some basic test scripts.
 
@@ -40,5 +40,13 @@ Create Table As, or INTO statements won't work and so if you do build your table
 
 ## How does this work? 
 - Using Pandas the script reads the table create sql statement off of your clipboard
-- It then exclusively reads the first row 
-
+- It then exclusively reads the first row and checks if the first word is 'Create' if not it terminates
+  - If the above condition is met and the script terminates a text file will pop up telling you this
+- If it passes it reads the table name and stores that as a variable
+- It then scans the entire statement for datatypes, i.e Int, Varchar this reduces the set to JUST the column names and their data types, throwing away everything else
+- Then it reads every column name and it's data type and outputs to a text file a set of predefined tests for example:
+  - If the data type was numeric i.e int/float/decimal it would output
+````sql
+  select min(col_name), avg(col_name), max(col_name) from table_name;
+````
+- However if it reads a data type it doesn't recognize (or its read garbage) it will output an error message to the text file.
