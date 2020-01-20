@@ -1,7 +1,7 @@
 ﻿# SQL Test Script Generator
 
 *For Redshift Table Builds*
-
+![git_header](./assets/git_header.PNG)
 ## What is this?
 This is a python script that reads a table build written in Redshift Syntax and then for every column outputs a text file with some basic test scripts.
 
