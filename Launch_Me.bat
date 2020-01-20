@@ -7,4 +7,4 @@ ECHO i.e you need to have defined your columns AND DATA TYPES
 ECHO Once you have copied your table script, press Enter.
 PAUSE
 ECHO Generating Test Script.... 
-C:/<path to your python install>/Python38-32/python.exe c:/<path to this script>/Gen_Test_Script.py
+C:/<path to your python install>/python.exe c:/<path to this script>/Gen_Test_Script.py
