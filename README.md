@@ -32,3 +32,9 @@ Part of thorough testing in SQL is ensuring that each column you have pulled thr
 4. Click on the open CMD window and hit enter
 5. If you've configured it properly AND copied the right thing a text file should open up a text file with your test scripts.
 6. A copy of that text file will be saved to the same folder you saved these scripts to
+
+### Acceptable Table Format
+In order for this script to work it needs to know what columns and what those columns data types are so it requires a full table build script to work, pictured below.
+![Good_Table](./assets/full_table_build.png)
+Create Table As (pictured below), or INTO statements won't work and so if you do build your tables that way, in order to have your cake and eat it too, build your table then get your IDE (Aginity / Athena) to generate a table build DDL and then voila you'll have something that resembles the top picture. 
+
