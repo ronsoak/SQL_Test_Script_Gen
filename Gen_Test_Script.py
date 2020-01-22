@@ -49,7 +49,7 @@ sql_output = open(filename,"w")                                            #Crea
 #READ THE COL NAMES AND DATA TYPES
 sql_load = pd.Series(sql_load)                                              #Turn the SQL into a Series so we can convert to upper case
 sql_load = sql_load.str.upper()                                             #Convert all values to upper case
-sql_load = sql_load.str.replace(r"\(\S*\)","")                              #Finds data types with bracket numbers and strips them i.e varchar(45) -> varchar
+sql_load = sql_load.str.replace(r"\(.*\)","")                              #Finds data types with bracket numbers and strips them i.e varchar(45) -> varchar
 sql_reduce = sql_load.loc[(sql_load.str.contains(fr'(\b({red_types})\b)', regex=True,case=False)==True)] #Reduces the dataset to just the cols with data types in them
 sql_reduce = sql_reduce.str.split(expand=True)                              #Splitting the columns off
 sql_cols = sql_reduce.loc[:,0:1]                                            #Only need the first two columns
