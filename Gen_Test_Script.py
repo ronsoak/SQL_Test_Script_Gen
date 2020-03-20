@@ -46,6 +46,7 @@ for table_line in valid_rows:
     table_line = str(table_line)
     col_name = table_line.split()[0:1]
     col_name = str(col_name)[1:-1]
+    col_name = col_name.replace("'","")
     dat_type = table_line.split()[1:2]
     dat_type = str(dat_type)
     if (re.search(r'\b(CHAR|CHARACTER|NCHAR|BPCHAR|VARCHAR|CHARACTER VARYING|NVARCHAR|TEXT)',dat_type,flags=re.IGNORECASE)): col_type= 'STRING'
