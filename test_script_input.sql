@@ -1,6 +1,5 @@
 create table public.customer_table
-(
-    cust_id         bigint          encode  AZ64,
+(cust_id         bigint          encode  AZ64,
     startdateutc    timestamp       encode  AZ64,
     first_name      varchar(99)     encode  ZSTD,
     last_name       varchar(99)     encode  ZSTD,
