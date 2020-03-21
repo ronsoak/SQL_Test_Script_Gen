@@ -40,7 +40,5 @@ Create Table As, or INTO statements won't work and so if you do build your table
 - It then scans the entire statement for datatypes, i.e Int, Varchar this reduces the set to JUST the column names and their data types, throwing away everything else
 - Then it reads every column name and it's data type and outputs to a text file a set of predefined tests for example:
   - If the data type was numeric i.e int/float/decimal it would output
-````sql
-  select min(col_name), avg(col_name), max(col_name) from table_name;
-````
+![Results](./assets/results_example.png)
 - However if it reads a data type it doesn't recognize (or its read garbage) it will output an error message to the text file.
