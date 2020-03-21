@@ -20,21 +20,65 @@ sql_output = open(filename,"w")
 #SCRIPT_GEN FUNCTION
 def script_gen(a,b,c):
     if      b == 'NUMBER':
+        sql_output.write("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n")
+        sql_output.write("-- Testing for Column: "+a+"\n")
+        sql_output.write("-- Column Type: Number \n")
+        sql_output.write("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n")
+        sql_output.write("-- Testing counts of column \n")
+        sql_output.write("select count(*) as row_count, count(distinct("+a+")) as distinct_values from "+c+"; \n \n" )
+        sql_output.write("-- Checking for nulls, are you expecting nulls? \n")
+        sql_output.write("select count(*) from "+c+" where "+a+" is null; \n \n" )
+        sql_output.write("-- Testing mins, avgs and max values \n")
         sql_output.write("select min("+a+"), avg("+a+"), max("+a+") from "+c+"; \n \n" )
+        sql_output.write("-- Testing median, redshift doesn't like doing medians with other calcs \n")
         sql_output.write("select median("+a+") from "+c+"; \n \n" )
-
+        sql_output.write("-- Testing 25% quartile, can be slow \n")
+        sql_output.write("select percentile_cont(.25) within group (order by"+a+") as low_quartile from "+c+"; \n \n" )
+        sql_output.write("-- Testing 50% quartile, can be slow\n")
+        sql_output.write("select percentile_cont(.50) within group (order by"+a+") as mid_quartile from "+c+"; \n \n" )
+        sql_output.write("-- Testing 75% quartile, can be slow\n")
+        sql_output.write("select percentile_cont(.75) within group (order by"+a+") as high_quartile from "+c+"; \n \n" )
     elif    b == 'DATES':
+        sql_output.write("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n")
+        sql_output.write("-- Testing for Column: "+a+"\n")
+        sql_output.write("-- Column Type: Date \n")
+        sql_output.write("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n")
+        sql_output.write("-- Testing counts of column \n")
+        sql_output.write("select count(*) as row_count, count(distinct("+a+")) as distinct_values from "+c+"; \n \n" )
+        sql_output.write("-- Checking for nulls, are you expecting nulls? \n")
+        sql_output.write("select count(*) from "+c+" where "+a+" is null; \n \n" )
+        sql_output.write("-- Checking for highs and lows, are they as you expected? \n")
         sql_output.write("select min("+a+"), max("+a+") from "+c+"; \n \n" )
-
+        sql_output.write("-- Checking how many dates are in the future. \n")
+        sql_output.write("select count(*) from "+c+" where "+a+" >sysdate; \n \n" )
+        sql_output.write("-- Checking how many dates have a timestamp. \n")
+        sql_output.write("select count(*) from "+c+" where substring("+a+",12,8)<> '00:00:00'; \n \n" )
     elif    b == 'STRING':
-        sql_output.write("select "+a+", count(*) from "+c+" group by 1 order by 2 desc limit 50; \n \n" )
-        sql_output.write("select count(distinct("+a+")), count(*) from "+c+" limit 50; \n \n" )
-
-    elif    b == 'BOOL':
+        sql_output.write("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n")
+        sql_output.write("-- Testing for Column: "+a+"\n")
+        sql_output.write("-- Column Type: String \n")
+        sql_output.write("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n")
+        sql_output.write("-- Testing counts of column \n")
+        sql_output.write("select count(*) as row_count, count(distinct("+a+")) as distinct_values from "+c+"; \n \n" )
+        sql_output.write("-- Checking for nulls, are you expecting nulls? \n")
+        sql_output.write("select count(*) from "+c+" where "+a+" is null; \n \n" )
+        sql_output.write("-- Top 50 values \n")
         sql_output.write("select "+a+", count(*) from "+c+" group by 1 order by 2 desc limit 10; \n \n" )
-
+        sql_output.write("-- Check string lengths \n")
+        sql_output.write("select min(len("+a+")) as min_length,max(len("+a+")) as max_length  from "+c+"; \n \n" )
+    elif    b == 'BOOL':
+        sql_output.write("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n")
+        sql_output.write("-- Testing for Column: "+a+"\n")
+        sql_output.write("-- Column Type: BOOL \n")
+        sql_output.write("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n")
+        sql_output.write("-- Testing counts of column \n")
+        sql_output.write("select count(*) as row_count, count(distinct("+a+")) as distinct_values from "+c+"; \n \n" )
+        sql_output.write("-- Checking for nulls, are you expecting nulls? \n")
+        sql_output.write("select count(*) from "+c+" where "+a+" is null; \n \n" )
+        sql_output.write("-- Breakdown of boolean \n")
+        sql_output.write("select "+a+", count(*) from "+c+" group by 1 order by 2 desc limit 10; \n \n" )
     elif    b == 'GEO':
-        sql_output.write("Geospatial Data not currently supported. \n \n")
+        sql_output.write("Geospatial Data not currently supported. Suggest Something?  \n \n")
     else:
         sql_output.write("Column:"+a+"is not a know Datatype. Datatype passed was:"+b+"\n \n")
 
