@@ -62,7 +62,7 @@ def script_gen(a,b,c):
         sql_output.write("select count(*) as row_count, count(distinct("+a+")) as distinct_values from "+c+"; \n \n" )
         sql_output.write("-- Checking for nulls, are you expecting nulls? \n")
         sql_output.write("select count(*) from "+c+" where "+a+" is null; \n \n" )
-        sql_output.write("-- Top 50 values \n")
+        sql_output.write("-- Top 10 values \n")
         sql_output.write("select "+a+", count(*) from "+c+" group by 1 order by 2 desc limit 10; \n \n" )
         sql_output.write("-- Check string lengths \n")
         sql_output.write("select min(len("+a+")) as min_length,max(len("+a+")) as max_length  from "+c+"; \n \n" )
